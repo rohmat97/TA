@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.HostRoom.SetRoomPricingActivity"
+    android:layout_marginTop="20dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Based on the amenities and the average
+host nearby pricing we recommend your
+room to be priced at :  " />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="USE IT"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right">
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Rp. 270.000 / Night" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:text="However the room is yours and you can
+the price below (left blank to go with recommended price) "
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:text=" Rp." />
+                <EditText
+                    android:id="@+id/price"
+                    android:textColor="#fff"
+                    android:layout_width="230dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:inputType="number"
+                    android:alpha="0.8"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:text=" / Night         " />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="                  Down Payment (DP)" />
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right">
+
+                <EditText
+                    android:id="@+id/fee"
+                    android:textColor="#fff"
+                    android:layout_width="188dp"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.8"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:background="@color/colorPrimary" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:text="% From Total Fees" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <Button
+                android:textColor="#fff"
+                android:background="@color/colorPrimaryDark"
+                android:id="@+id/saveroom"
+                android:layout_width="176dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="Save Room Data"/>
+            <Button
+                android:textColor="#fff"
+                android:background="@color/colorPrimaryDark"
+                android:text="Set Availability "
+                android:id="@+id/setavaliable"
+                android:layout_width="176dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

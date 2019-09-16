@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.HostRoom.GeneralDescriptionActivity"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView  android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"/>
+            <EditText
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView  android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Room Name"/>
+            <EditText
+                android:id="@+id/roomName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView  android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Room Type"/>
+            <EditText
+                android:id="@+id/roomType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <TextView  android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Main Amenities :"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView  android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Shower"
+                    android:layout_marginRight="150dp"/>
+                <CheckBox
+                    android:id="@+id/shower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView  android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Food"
+                    android:layout_marginRight="150dp"/>
+                <CheckBox
+                    android:id="@+id/food"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView  android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Wi-Fi"
+                    android:layout_marginRight="150dp"/>
+                <CheckBox
+                    android:id="@+id/wifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView  android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="AC/FAN"
+                    android:layout_marginRight="150dp"/>
+                <CheckBox
+                    android:id="@+id/acorfan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+                <TextView  android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Parking"
+                    android:layout_marginRight="150dp"/>
+                <CheckBox
+                    android:id="@+id/parking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"/>
+                <TextView  android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Security"
+                    android:layout_marginRight="150dp"/>
+                <CheckBox
+                    android:id="@+id/security"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Room Description :"/>
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
+            <Button
+                android:layout_marginTop="20dp"
+                android:id="@+id/Save"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="Next"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

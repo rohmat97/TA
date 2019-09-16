@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <Button
+        android:id="@+id/setloc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="Set Default Location" />
+
+    <SearchView
+        android:id="@+id/findloc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/maps"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"></com.google.android.gms.maps.MapView>
+    <!--<fragment-->
+        <!--android:id="@+id/map_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="500dp"-->
+        <!--tools:context=".ui.SetLocationActivity" />-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pinned Location" />
+
+    <EditText
+        android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/nextinput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#707070"
+        android:text="Next"
+        android:textColor="#fff" />
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>
