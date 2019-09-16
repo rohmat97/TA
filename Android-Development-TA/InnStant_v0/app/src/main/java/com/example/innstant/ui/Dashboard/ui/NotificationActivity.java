@@ -1,16 +1,14 @@
 package com.example.innstant.ui.Dashboard.ui;
 
-import androidx.annotation.NonNull;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,9 +22,7 @@ import com.example.innstant.data.PreferenceHelper;
 import com.example.innstant.data.model.Transaction;
 import com.example.innstant.ui.Rent.Adapter.AdapterRoomRent;
 import com.example.innstant.ui.Rent.ApprovalActivity;
-import com.example.innstant.ui.Rent.RentRoomActivity;
 import com.example.innstant.viewmodel.DashboardViewModel;
-import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -37,22 +33,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NotificationActivity extends AppCompatActivity  implements AdapterRoomRent.OnItemClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class NotificationActivity extends AppCompatActivity implements AdapterRoomRent.OnItemClickListener {
+    @BindView(R.id.list_transaksi)
+    RecyclerView listTransaksi;
     private DashboardViewModel mViewModel;
     RecyclerView recyclerView;
     AdapterRoomRent adapter;
     ArrayList<Transaction> list;
     RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        ButterKnife.bind(this);
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("email");
         mViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
 
 
-        recyclerView = findViewById(R.id.list_transaksi);
+        recyclerView = listTransaksi;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -60,16 +63,17 @@ public class NotificationActivity extends AppCompatActivity  implements AdapterR
         GetData(json);
     }
 
-    public void  GetData(String json)  {
+    public void GetData(String json) {
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
         String url = PreferenceHelper.getBaseUrl() + "/transactions";
         list = new ArrayList<>();
 
-        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, url,null,
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     Transaction transaksi = new Transaction();
                     JSONObject jsonObject;
+
                     @Override
                     public void onResponse(JSONArray response) {
                         //Toast.makeText(ListedRoomActivity.this,"berhasil    :"+response,Toast.LENGTH_LONG).show();
@@ -82,16 +86,16 @@ public class NotificationActivity extends AppCompatActivity  implements AdapterR
                                 e.printStackTrace();
                             }
                             transaksi = new Gson().fromJson(String.valueOf(jsonObject), Transaction.class);
-                            Log.d("TIME",String.valueOf( transaksi.toString()));
-                            if(transaksi.getHostId().equals(json)){
-                            list.add(transaksi);
+                            Log.d("TIME", String.valueOf(transaksi.toString()));
+                            if (transaksi.getHostId().equals(json)) {
+                                list.add(transaksi);
+                            }
                         }
+                        if (list.size() < 1) {
+                            Toast.makeText(NotificationActivity.this, "TIDAK ADA NOTIFIKASI", Toast.LENGTH_LONG).show();
                         }
-                        if(list.size()<1){
-                            Toast.makeText(NotificationActivity.this,"TIDAK ADA NOTIFIKASI",Toast.LENGTH_LONG).show();
-                        }
-                       // Toast.makeText(NotificationActivity.this,"berhasil    :"+json.toString(),Toast.LENGTH_LONG).show();
-                        adapter = new AdapterRoomRent(NotificationActivity.this,list,NotificationActivity.this);
+                        // Toast.makeText(NotificationActivity.this,"berhasil    :"+json.toString(),Toast.LENGTH_LONG).show();
+                        adapter = new AdapterRoomRent(NotificationActivity.this, list, NotificationActivity.this);
                         recyclerView.setAdapter(adapter);
                     }
 
@@ -99,12 +103,12 @@ public class NotificationActivity extends AppCompatActivity  implements AdapterR
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(NotificationActivity.this,"gagal     :"+error.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(NotificationActivity.this, "gagal     :" + error.toString(), Toast.LENGTH_LONG).show();
                     }
 
                 }
 
-        ){
+        ) {
             //here I want to post data to sever
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -125,9 +129,9 @@ public class NotificationActivity extends AppCompatActivity  implements AdapterR
         String status = "approval";
         Intent intent = new Intent(NotificationActivity.this, ApprovalActivity.class);
         String data = new Gson().toJson(item);
-        intent.putExtra("email",json);
-        intent.putExtra("status",status);
-        intent.putExtra("dataTransaksi",data);
+        intent.putExtra("email", json);
+        intent.putExtra("status", status);
+        intent.putExtra("dataTransaksi", data);
         startActivity(intent);
     }
 

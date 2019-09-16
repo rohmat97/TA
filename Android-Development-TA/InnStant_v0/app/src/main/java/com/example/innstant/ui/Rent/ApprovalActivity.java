@@ -1,60 +1,69 @@
 package com.example.innstant.ui.Rent;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.innstant.R;
 import com.example.innstant.data.PreferenceHelper;
 import com.example.innstant.data.model.Room;
 import com.example.innstant.data.model.Transaction;
 import com.example.innstant.ui.DashboardActivity;
-import com.example.innstant.ui.RentStatus.idleActivity;
-import com.example.innstant.ui.RoomListed.Adapter.adapterListedRoom;
-import com.example.innstant.ui.RoomListed.ListedRoomActivity;
 import com.example.innstant.viewmodel.ApprovalViewModel;
-import com.example.innstant.viewmodel.idleViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ApprovalActivity extends AppCompatActivity {
-    Button cancel, Approved;
-    TextView namaKamar, namaUser, startBook, endBook, duration, status;
+    @BindView(R.id.namaKamar)
+    TextView namaKamar;
+    @BindView(R.id.pictBooking)
+    ImageView pictBooking;
+    @BindView(R.id.namaUser)
+    TextView namaUser;
+    @BindView(R.id.Chat)
+    TextView Chat;
+    @BindView(R.id.viewProfile)
+    TextView viewProfile;
+    @BindView(R.id.checkin)
+    TextView checkin;
+    @BindView(R.id.duration)
+    TextView duration;
+    @BindView(R.id.checkout)
+    TextView checkout;
+    @BindView(R.id.status)
+    TextView status;
+    @BindView(R.id.approved)
+    Button approved;
+    @BindView(R.id.cancelBooking)
+    Button cancelBooking;
     private ApprovalViewModel mViewModel;
     Transaction transaksi = new Transaction();
     Gson gson = new Gson();
@@ -71,17 +80,6 @@ public class ApprovalActivity extends AppCompatActivity {
         String stat = bundle.getString("status");
         transaksi = gson.fromJson(jsonTransaksi, Transaction.class);
         Room room = gson.fromJson(json1, Room.class);
-
-        Approved = (Button) findViewById(R.id.approved);
-        cancel = (Button) findViewById(R.id.cancelBooking);
-        namaKamar = (TextView) findViewById(R.id.namaKamar);
-        namaUser = (TextView) findViewById(R.id.namaUser);
-        startBook = (TextView) findViewById(R.id.checkin);
-        endBook = (TextView) findViewById(R.id.checkout);
-        duration = (TextView) findViewById(R.id.duration);
-        status = (TextView) findViewById(R.id.status);
-
-
         ButterKnife.bind(this);
         mViewModel = ViewModelProviders.of(this).get(ApprovalViewModel.class);
         if (stat.equals("pesan")) {
@@ -98,12 +96,12 @@ public class ApprovalActivity extends AppCompatActivity {
             //
 //            Toast.makeText(ApprovalActivity.this,"GUEST",Toast.LENGTH_LONG).show();
 //            Approved.setVisibility(View.GONE);
-            cancel.setText("Cancel");
-            Approved.setText("Back");
-            cancel.setBackgroundColor(Color.parseColor("#FF0000"));
+            cancelBooking.setText("Cancel");
+            approved.setText("Back");
+            cancelBooking.setBackgroundColor(Color.parseColor("#FF0000"));
             setData(transaksi);
 
-            Approved.setOnClickListener(new View.OnClickListener() {
+            approved.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ApprovalActivity.this, DashboardActivity.class);
@@ -111,7 +109,7 @@ public class ApprovalActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-            cancel.setOnClickListener(new View.OnClickListener() {
+            cancelBooking.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     cancelTransaksi(transaksi);
@@ -126,17 +124,17 @@ public class ApprovalActivity extends AppCompatActivity {
 //            Toast.makeText(ApprovalActivity.this, "HOST", Toast.LENGTH_LONG).show();
 
             setData(transaksi);
-            if(transaksi.getPaymentStatus().equals("sudahbayar")){
-                if(stat.equals("approval")){
-                    cancel.setText("Selesai Transaksi");
-                    Approved.setText("Back");
-                }else{
-                    cancel.setText("Cancel");
-                    Approved.setText("Back");
+            if (transaksi.getPaymentStatus().equals("sudahbayar")) {
+                if (stat.equals("approval")) {
+                    cancelBooking.setText("Selesai Transaksi");
+                    approved.setText("Back");
+                } else {
+                    cancelBooking.setText("Cancel");
+                    approved.setText("Back");
                 }
 
-                cancel.setBackgroundColor(Color.parseColor("#FF0000"));
-                Approved.setOnClickListener(new View.OnClickListener() {
+                cancelBooking.setBackgroundColor(Color.parseColor("#FF0000"));
+                approved.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(ApprovalActivity.this, DashboardActivity.class);
@@ -144,7 +142,7 @@ public class ApprovalActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-                cancel.setOnClickListener(new View.OnClickListener() {
+                cancelBooking.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cancelTransaksi(transaksi);
@@ -154,15 +152,15 @@ public class ApprovalActivity extends AppCompatActivity {
                     }
                 });
 
-            }else{
-                Approved.setOnClickListener(new View.OnClickListener() {
+            } else {
+                approved.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         updateTransaksi(transaksi, json);
 
                     }
                 });
-                cancel.setOnClickListener(new View.OnClickListener() {
+                cancelBooking.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cancelTransaksi(transaksi);
@@ -197,8 +195,8 @@ public class ApprovalActivity extends AppCompatActivity {
         namaUser.setText(jsonTransaksi.getHostName());
         namaKamar.setText(jsonTransaksi.getRoomName());
 //        Toast.makeText(ApprovalActivity.this,jsonTransaksi.toString(),Toast.LENGTH_LONG).show();
-        startBook.setText(String.valueOf(jsonTransaksi.getBookStartDate()));
-        endBook.setText(String.valueOf(jsonTransaksi.getBookEndDate()));
+        checkin.setText(String.valueOf(jsonTransaksi.getBookStartDate()));
+        checkout.setText(String.valueOf(jsonTransaksi.getBookEndDate()));
         duration.setText(String.valueOf(TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)));
 
         if ((transaksi.getPaymentStatus().equals("sudahbayar"))) {
@@ -321,7 +319,7 @@ public class ApprovalActivity extends AppCompatActivity {
             Log.d("ISINYA", transaksi.toString());
             Intent intent = new Intent(ApprovalActivity.this, DashboardActivity.class);
             intent.putExtra("email", json);
-                    startActivity(intent);
+            startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }

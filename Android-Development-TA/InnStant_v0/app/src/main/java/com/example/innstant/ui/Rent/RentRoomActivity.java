@@ -2,12 +2,10 @@ package com.example.innstant.ui.Rent;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,12 +25,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.innstant.R;
 import com.example.innstant.data.PreferenceHelper;
-import com.example.innstant.data.model.Room;
 import com.example.innstant.data.model.Transaction;
-import com.example.innstant.ui.HostRoom.Adapter.AdapterRoomHosting;
 import com.example.innstant.ui.Rent.Adapter.AdapterRoomRent;
-import com.example.innstant.ui.RoomHostingActivity;
-import com.example.innstant.ui.RoomListed.Adapter.adapterListedRoom;
 import com.example.innstant.ui.RoomListed.ListedRoomActivity;
 import com.example.innstant.viewmodel.ListerRoomVewModel;
 import com.google.android.material.navigation.NavigationView;
@@ -42,25 +36,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RentRoomActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterRoomRent.OnItemClickListener {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.addRent)
+    Button addRent;
+    @BindView(R.id.rentRoom)
+    RecyclerView rentRoom;
+    @BindView(R.id.nav_view)
+    NavigationView navView;
+    @BindView(R.id.drawer_layout)
+
+    DrawerLayout drawerLayout;
     private ListerRoomVewModel mViewModel;
-    Button rent;
     RecyclerView recyclerView;
     AdapterRoomRent adapter;
     ArrayList<Transaction> list;
     RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +80,6 @@ public class RentRoomActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        rent =(Button) findViewById(R.id.addRent);
 
         recyclerView = findViewById(R.id.rentRoom);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -90,47 +90,48 @@ public class RentRoomActivity extends AppCompatActivity
 
 
         GetData(json);
-        rent.setOnClickListener(new View.OnClickListener() {
+        rentRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(RentRoomActivity.this, ListedRoomActivity.class);
-                intent.putExtra("email",json);
+                intent.putExtra("email", json);
                 startActivity(intent);
             }
         });
     }
 
 
-    public void  GetData(String json)  {
+    public void GetData(String json) {
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
         String url = PreferenceHelper.getBaseUrl() + "/transactions";
         list = new ArrayList<>();
 
-        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, url,null,
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     Transaction transaksi = new Transaction();
                     JSONObject jsonObject;
+
                     @Override
                     public void onResponse(JSONArray response) {
 
                         for (int i = 0; i < response.length(); i++) {
 
                             try {
-                                 jsonObject = response.getJSONObject(i);
+                                jsonObject = response.getJSONObject(i);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             transaksi = new Gson().fromJson(String.valueOf(jsonObject), Transaction.class);
 //                            Log.d("TIME",String.valueOf( dateFormat.format(date)));
-                            if(transaksi.getGuestId().equals(json)){
+                            if (transaksi.getGuestId().equals(json)) {
                                 list.add(transaksi);
                             }
                         }
 
-                        adapter = new AdapterRoomRent(RentRoomActivity.this,list,  RentRoomActivity.this);
+                        adapter = new AdapterRoomRent(RentRoomActivity.this, list, RentRoomActivity.this);
                         recyclerView.setAdapter(adapter);
                     }
 
@@ -143,7 +144,7 @@ public class RentRoomActivity extends AppCompatActivity
 
                 }
 
-        ){
+        ) {
             //here I want to post data to sever
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -221,11 +222,11 @@ public class RentRoomActivity extends AppCompatActivity
         String status = "check";
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("email");
-        Intent intent = new Intent(RentRoomActivity.this,ApprovalActivity.class);
+        Intent intent = new Intent(RentRoomActivity.this, ApprovalActivity.class);
         String data = new Gson().toJson(item);
-        intent.putExtra("email",json);
-        intent.putExtra("dataTransaksi",data);
-        intent.putExtra("status",status);
+        intent.putExtra("email", json);
+        intent.putExtra("dataTransaksi", data);
+        intent.putExtra("status", status);
         startActivity(intent);
     }
 }

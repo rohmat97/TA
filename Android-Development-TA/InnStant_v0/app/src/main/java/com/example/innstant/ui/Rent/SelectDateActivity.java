@@ -1,8 +1,5 @@
 package com.example.innstant.ui.Rent;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +9,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,7 +27,6 @@ import com.example.innstant.data.model.Room;
 import com.example.innstant.data.model.Transaction;
 import com.example.innstant.data.model.User;
 import com.example.innstant.viewmodel.ApprovalViewModel;
-import com.example.innstant.viewmodel.DashboardViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -36,26 +34,33 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SelectDateActivity extends AppCompatActivity {
     final Calendar myCalendar = Calendar.getInstance();
-    EditText awal,akhir;
-    TextView price,dp,total;
     Gson gson = new Gson();
     Transaction transaksi = new Transaction();
-    Button requestBook;
     Bundle bundle;
-    String json,json1;
+    String json, json1;
+    @BindView(R.id.awal)
+    EditText awal;
+    @BindView(R.id.akhir)
+    EditText akhir;
+    @BindView(R.id.Dp)
+    TextView Dp;
+    @BindView(R.id.price)
+    TextView price;
+    @BindView(R.id.totalPrice)
+    TextView totalPrice;
+    @BindView(R.id.requestBook)
+    Button requestBook;
 
     private ApprovalViewModel mViewModel;
 
@@ -64,26 +69,19 @@ public class SelectDateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_date);
         setTitle("Select Date");
-         awal = (EditText) findViewById(R.id.awal);
-         akhir = (EditText) findViewById(R.id.akhir);
-         dp =(TextView) findViewById(R.id.Dp);
-         price=(TextView) findViewById(R.id.price);
-         total=(TextView) findViewById(R.id.totalPrice);
-         requestBook = (Button) findViewById(R.id.requestBook);
-         bundle = getIntent().getExtras();
-         json = bundle.getString("data");
-         json1 = bundle.getString("email");
+        bundle = getIntent().getExtras();
+        json = bundle.getString("data");
+        json1 = bundle.getString("email");
 
         ButterKnife.bind(this);
         mViewModel = ViewModelProviders.of(this).get(ApprovalViewModel.class);
 
 
-        Room room= gson.fromJson(json,Room.class);
-
+        Room room = gson.fromJson(json, Room.class);
 
 //        dp.setText(room.getDpPercentage(), TextView.BufferType.NORMAL);
         price.setText(room.getPrice().toString());
-        total.setText(room.getPrice());
+        totalPrice.setText(room.getPrice());
 
         awal.setOnClickListener(new View.OnClickListener() {
             DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -99,15 +97,16 @@ public class SelectDateActivity extends AppCompatActivity {
 
                 }
 
-                private void updateLabel(){
+                private void updateLabel() {
                     String myFormat = "dd-MM-yyyy"; //In which you need put here
                     SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
 
                     awal.setText(sdf.format(myCalendar.getTime()));
                     transaksi.setBookStartDate(myCalendar.getTime().toString());
-                  }
+                }
 
             };
+
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -151,25 +150,26 @@ public class SelectDateActivity extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        for(int x =0;x<2;x++){
-            getData(transaksi,json1,room);
+        for (int x = 0; x < 2; x++) {
+            getData(transaksi, json1, room);
         }
         requestBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    postData(transaksi,json,json1);
+                postData(transaksi, json, json1);
 
 
             }
         });
     }
-    private void postData(Transaction transaksi, String json ,String json1){
+
+    private void postData(Transaction transaksi, String json, String json1) {
         String paramString = new GsonBuilder().create().toJson(transaksi);
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
         String url = PreferenceHelper.getBaseUrl() + "/transactions";
         try {
-            JSONObject param =  new JSONObject(paramString);
+            JSONObject param = new JSONObject(paramString);
             JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, param,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -205,14 +205,15 @@ public class SelectDateActivity extends AppCompatActivity {
         }
 
         String status = "pesan";
-        Intent intent = new Intent(SelectDateActivity.this,ApprovalActivity.class);
-        intent.putExtra("email",json1);
-        intent.putExtra("data",json);
-        intent.putExtra("dataTransaksi",paramString);
-        intent.putExtra("status",status);
+        Intent intent = new Intent(SelectDateActivity.this, ApprovalActivity.class);
+        intent.putExtra("email", json1);
+        intent.putExtra("data", json);
+        intent.putExtra("dataTransaksi", paramString);
+        intent.putExtra("status", status);
 //        Toast.makeText(SelectDateActivity.this,"TEST   "+transaksi.toString(),Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
+
     private void getData(Transaction transaksi, String json, Room room) {
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
@@ -224,52 +225,52 @@ public class SelectDateActivity extends AppCompatActivity {
         transaksi.setPaymentStatus("belumbayar");
 //        Toast.makeText(ApprovalActivity.this, json+"   :" + transaksi.toString(), Toast.LENGTH_LONG).show();
         String paramString = new GsonBuilder().create().toJson(transaksi);
-            JsonArrayRequest jsonUser= new JsonArrayRequest(Request.Method.GET, urlUser, null,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            JSONObject jsonObject = new JSONObject();
-                            User dataUser;
-                            String userGuest = null,userHost;
-                            //  Toast.makeText(SelectDateActivity.this, response.toString(), Toast.LENGTH_LONG).show();
+        JsonArrayRequest jsonUser = new JsonArrayRequest(Request.Method.GET, urlUser, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        JSONObject jsonObject = new JSONObject();
+                        User dataUser;
+                        String userGuest = null, userHost;
+                        //  Toast.makeText(SelectDateActivity.this, response.toString(), Toast.LENGTH_LONG).show();
 
-                            for (int i = 0; i < response.length(); i++) {
+                        for (int i = 0; i < response.length(); i++) {
 
-                                try {
-                                    jsonObject = response.getJSONObject(i);
+                            try {
+                                jsonObject = response.getJSONObject(i);
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                dataUser = new Gson().fromJson(String.valueOf(jsonObject), User.class);
-//                            Log.d("TIME",String.valueOf( dateFormat.format(date)));
-                                if(dataUser.getUserId().equals(json)){
-                                    userGuest = dataUser.getFirstName();
-                                    transaksi.setGuestName(userGuest);
-                                }else{
-
-                                }
-
-                                if(dataUser.getUserId().equals(transaksi.getHostId())){
-                                    userHost = dataUser.getFirstName();
-                                    transaksi.setHostName(userHost);
-                                    Log.d("IDUSER",userGuest+userHost);
-                                }else {
-
-                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            //  Toast.makeText(SelectDateActivity.this, json+"   :" + transaksi.getGuestName()+transaksi.getHostName(), Toast.LENGTH_LONG).show();
+                            dataUser = new Gson().fromJson(String.valueOf(jsonObject), User.class);
+//                            Log.d("TIME",String.valueOf( dateFormat.format(date)));
+                            if (dataUser.getUserId().equals(json)) {
+                                userGuest = dataUser.getFirstName();
+                                transaksi.setGuestName(userGuest);
+                            } else {
 
+                            }
+
+                            if (dataUser.getUserId().equals(transaksi.getHostId())) {
+                                userHost = dataUser.getFirstName();
+                                transaksi.setHostName(userHost);
+                                Log.d("IDUSER", userGuest + userHost);
+                            } else {
+
+                            }
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+                        //  Toast.makeText(SelectDateActivity.this, json+"   :" + transaksi.getGuestName()+transaksi.getHostName(), Toast.LENGTH_LONG).show();
 
-                }
-            }){
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-            };
-            requstQueue.add(jsonUser);
+            }
+        }) {
+
+        };
+        requstQueue.add(jsonUser);
 
     }
 }

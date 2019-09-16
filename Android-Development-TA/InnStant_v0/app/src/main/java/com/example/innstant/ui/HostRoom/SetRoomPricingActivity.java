@@ -21,7 +21,6 @@ import com.example.innstant.R;
 import com.example.innstant.data.PreferenceHelper;
 import com.example.innstant.data.model.Room;
 import com.example.innstant.ui.DashboardActivity;
-import com.example.innstant.ui.RoomListed.ListedRoomActivity;
 import com.example.innstant.viewmodel.SetRoomPricingActivityViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,40 +31,40 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SetRoomPricingActivity extends AppCompatActivity {
-    private SetRoomPricingActivityViewModel mViewModel;
-    Button setAvaliablity ;
-    Button saveRoom;
+    @BindView(R.id.price)
     EditText price;
+    @BindView(R.id.fee)
     EditText fee;
-
+    @BindView(R.id.saveroom)
+    Button saveroom;
+    @BindView(R.id.setavaliable)
+    Button setavaliable;
+    private SetRoomPricingActivityViewModel mViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_room_pricing);
-        setAvaliablity=(Button) findViewById(R.id.setavaliable);
-        saveRoom= (Button) findViewById(R.id.saveroom);
-        price =(EditText) findViewById(R.id.price);
-        fee =(EditText) findViewById(R.id.fee);
         ButterKnife.bind(this);
         mViewModel = ViewModelProviders.of(this).get(SetRoomPricingActivityViewModel.class);
 
 
-        setAvaliablity.setOnClickListener(new View.OnClickListener() {
+        setavaliable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SetRoomPricingActivity.this, SetAvaliabilityActivity.class);
                 postData();
                 Bundle bundle = getIntent().getExtras();
                 String json1 = bundle.getString("email");
-                intent.putExtra("email",json1);
+                intent.putExtra("email", json1);
                 startActivity(intent);
             }
         });
 
-        saveRoom.setOnClickListener(new View.OnClickListener() {
+        saveroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -73,23 +72,24 @@ public class SetRoomPricingActivity extends AppCompatActivity {
                 Intent intent = new Intent(SetRoomPricingActivity.this, DashboardActivity.class);
                 Bundle bundle = getIntent().getExtras();
                 String json1 = bundle.getString("email");
-                intent.putExtra("email",json1);
+                intent.putExtra("email", json1);
                 startActivity(intent);
                 finish();
             }
         });
 
     }
-    public void postData()  {
+
+    public void postData() {
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("dataRoom");
         String json1 = bundle.getString("email");
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
-        String url = PreferenceHelper.getBaseUrl() + "/users/"+json1+"/rooms";
+        String url = PreferenceHelper.getBaseUrl() + "/users/" + json1 + "/rooms";
 
         Gson gson = new Gson();
-        Room room= gson.fromJson(json,Room.class);
+        Room room = gson.fromJson(json, Room.class);
         room.setPrice(price.getText().toString());
         room.setDpPercentage(Integer.parseInt(String.valueOf(fee.getText())));
         String paramString = new GsonBuilder().create().toJson(room);
@@ -97,11 +97,11 @@ public class SetRoomPricingActivity extends AppCompatActivity {
         try {
             JSONObject param = new JSONObject(paramString);
 
-            JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.PATCH, url,param,
+            JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.PATCH, url, param,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                              Toast.makeText(SetRoomPricingActivity.this,"berhasil    :"+response,Toast.LENGTH_LONG).show();
+                            Toast.makeText(SetRoomPricingActivity.this, "berhasil    :" + response, Toast.LENGTH_LONG).show();
                         }
 
                     },
@@ -113,7 +113,7 @@ public class SetRoomPricingActivity extends AppCompatActivity {
 
                     }
 
-            ){
+            ) {
                 //here I want to post data to sever
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {

@@ -1,47 +1,68 @@
 package com.example.innstant.ui.Rent;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.innstant.R;
 import com.example.innstant.data.model.Room;
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RoomDetailActivity extends AppCompatActivity {
 
-    TextView namaKamar,PriceTag,showerRent,foodRent,wifiRent,acfanRent,parkingRent,securityRent,ratings;
+    @BindView(R.id.namaKamar)
+    TextView namaKamar;
+    @BindView(R.id.priceTag)
+    TextView priceTag;
+    @BindView(R.id.pager)
+    ViewPager pager;
+    @BindView(R.id.showerRent)
+    TextView showerRent;
+    @BindView(R.id.foodRent)
+    TextView foodRent;
+    @BindView(R.id.wifiRent)
+    TextView wifiRent;
+    @BindView(R.id.acfanRent)
+    TextView acfanRent;
+    @BindView(R.id.parkingRent)
+    TextView parkingRent;
+    @BindView(R.id.securityRent)
+    TextView securityRent;
+    @BindView(R.id.ratings)
+    TextView ratings;
+    @BindView(R.id.reviewRent)
+    RecyclerView reviewRent;
+    @BindView(R.id.showAllReview)
+    TextView showAllReview;
+    @BindView(R.id.bookRent)
+    Button bookRent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_detail_rent);
+        ButterKnife.bind(this);
         setTitle("Room Detail");
 
-        namaKamar=(TextView) findViewById(R.id.namaKamar);
-        PriceTag=(TextView) findViewById(R.id.priceTag);
-        showerRent=(TextView) findViewById(R.id.showerRent);
-        foodRent=(TextView) findViewById(R.id.foodRent);
-        wifiRent=(TextView) findViewById(R.id.wifiRent);
-        acfanRent=(TextView) findViewById(R.id.acfanRent);
-        parkingRent=(TextView) findViewById(R.id.parkingRent);
-        securityRent=(TextView) findViewById(R.id.securityRent);
-        ratings=(TextView) findViewById(R.id.ratings);
 
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("data");
         String json1 = bundle.getString("email");
         Gson gson = new Gson();
-        Room room= gson.fromJson(json,Room.class);
-        List amenis = new ArrayList<>() ;
+        Room room = gson.fromJson(json, Room.class);
+        List amenis = new ArrayList<>();
         amenis = room.getAmenities();
 
         showerRent.setText("Not Available");
@@ -51,32 +72,32 @@ public class RoomDetailActivity extends AppCompatActivity {
         parkingRent.setText("Not Available");
         securityRent.setText("Not Available");
 
-        PriceTag.setText(room.getPrice().toString());
+        priceTag.setText(room.getPrice().toString());
         namaKamar.setText(room.getName());
 
         List finalAmenis = amenis;
 
-        for(int x=0 ; finalAmenis.size()>x  ; x++){
-            if(finalAmenis.get(x) == null){
+        for (int x = 0; finalAmenis.size() > x; x++) {
+            if (finalAmenis.get(x) == null) {
 
-            }else{
+            } else {
 
-                if(finalAmenis.get(x).toString().equals("Shower")){
+                if (finalAmenis.get(x).toString().equals("Shower")) {
                     showerRent.setText(finalAmenis.get(x).toString());
                 }
-                if (finalAmenis.get(x).toString().equals("Food")){
+                if (finalAmenis.get(x).toString().equals("Food")) {
                     foodRent.setText(finalAmenis.get(x).toString());
                 }
-                if (finalAmenis.get(x).toString().equals("Wifi")){
+                if (finalAmenis.get(x).toString().equals("Wifi")) {
                     wifiRent.setText(finalAmenis.get(x).toString());
                 }
-                if (finalAmenis.get(x).toString().equals("Ac/Fan")){
+                if (finalAmenis.get(x).toString().equals("Ac/Fan")) {
                     acfanRent.setText(finalAmenis.get(x).toString());
                 }
-                if (finalAmenis.get(x).toString().equals("Parking")){
+                if (finalAmenis.get(x).toString().equals("Parking")) {
                     parkingRent.setText(finalAmenis.get(x).toString());
                 }
-                if (finalAmenis.get(x).toString().equals("Security")){
+                if (finalAmenis.get(x).toString().equals("Security")) {
                     securityRent.setText(finalAmenis.get(x).toString());
                 }
             }
@@ -86,9 +107,9 @@ public class RoomDetailActivity extends AppCompatActivity {
         selectdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RoomDetailActivity.this,SelectDateActivity.class);
-                intent.putExtra("data",json);
-                intent.putExtra("email",json1);
+                Intent intent = new Intent(RoomDetailActivity.this, SelectDateActivity.class);
+                intent.putExtra("data", json);
+                intent.putExtra("email", json1);
                 startActivity(intent);
             }
         });

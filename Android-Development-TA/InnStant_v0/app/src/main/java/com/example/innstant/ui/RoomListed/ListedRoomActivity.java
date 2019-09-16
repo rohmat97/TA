@@ -2,10 +2,9 @@ package com.example.innstant.ui.RoomListed;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,30 +20,26 @@ import com.android.volley.toolbox.Volley;
 import com.example.innstant.R;
 import com.example.innstant.data.PreferenceHelper;
 import com.example.innstant.data.model.Room;
-import com.example.innstant.data.model._id;
-import com.example.innstant.ui.HostRoom.Adapter.AdapterRoomHosting;
 import com.example.innstant.ui.RoomListed.Adapter.adapterListedRoom;
 import com.example.innstant.viewmodel.ListerRoomVewModel;
-import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static java.util.Collections.singletonList;
-
 public class ListedRoomActivity extends AppCompatActivity implements adapterListedRoom.OnItemClickListener {
+    @BindView(R.id.avaliability)
+    Spinner avaliability;
+    @BindView(R.id.listroom)
+    RecyclerView listroom;
     private ListerRoomVewModel mViewModel;
     RecyclerView recyclerView;
     adapterListedRoom adapter;
@@ -58,7 +53,7 @@ public class ListedRoomActivity extends AppCompatActivity implements adapterList
         setContentView(R.layout.activity_listed_room);
 
         list = new ArrayList<>();
-        recyclerView = findViewById(R.id.listroom);
+        recyclerView = listroom;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -69,7 +64,7 @@ public class ListedRoomActivity extends AppCompatActivity implements adapterList
         GetData();
     }
 
-    public ArrayList<Room> GetData()  {
+    public ArrayList<Room> GetData() {
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
         String url = PreferenceHelper.getBaseUrl() + "/rooms";
@@ -78,7 +73,7 @@ public class ListedRoomActivity extends AppCompatActivity implements adapterList
 
 //        Type listType = new TypeToken<List<String>>() {}.getType();
 
-        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, url,null,
+        JsonArrayRequest jsonobj = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -87,33 +82,33 @@ public class ListedRoomActivity extends AppCompatActivity implements adapterList
 
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                Room room =new Room();
+                                Room room = new Room();
                                 room = new Gson().fromJson(String.valueOf(jsonObject), Room.class);
-                                if(room.getOwnerId().equals(json)){
+                                if (room.getOwnerId().equals(json)) {
 
-                                }else{
+                                } else {
                                     list.add(room);
                                 }
 
-                                adapter = new adapterListedRoom(ListedRoomActivity.this,list, ListedRoomActivity.this);
+                                adapter = new adapterListedRoom(ListedRoomActivity.this, list, ListedRoomActivity.this);
                                 recyclerView.setAdapter(adapter);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                          }
                         }
+                    }
 
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ListedRoomActivity.this,"gagal     :"+error.toString(),Toast.LENGTH_LONG).show();
-                      }
+                        Toast.makeText(ListedRoomActivity.this, "gagal     :" + error.toString(), Toast.LENGTH_LONG).show();
+                    }
 
                 }
 
-        ){
+        ) {
             //here I want to post data to sever
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -129,17 +124,16 @@ public class ListedRoomActivity extends AppCompatActivity implements adapterList
     }
 
 
-
     @Override
     public void onItemClick(Room item) {
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("email");
         Gson gson = new Gson();
-        String data =gson.toJson(item);
+        String data = gson.toJson(item);
         Intent intent = new Intent(ListedRoomActivity.this, RoomDetailActivity.class);
-        intent.putExtra("email",json);
-        intent.putExtra("data",data);
-        Toast.makeText(ListedRoomActivity.this,json,Toast.LENGTH_LONG).show();
+        intent.putExtra("email", json);
+        intent.putExtra("data", data);
+        Toast.makeText(ListedRoomActivity.this, json, Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
 
