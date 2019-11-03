@@ -30,6 +30,7 @@ import com.example.innstant.R;
 import com.example.innstant.data.PreferenceHelper;
 import com.example.innstant.data.model.Room;
 import com.example.innstant.ui.HostRoom.Adapter.AdapterRoomHosting;
+import com.example.innstant.ui.HostRoom.GeneralDescriptionActivity;
 import com.example.innstant.ui.RoomListed.EditRoomActivity;
 import com.example.innstant.viewmodel.ListerRoomVewModel;
 import com.google.android.material.navigation.NavigationView;
@@ -160,7 +161,7 @@ public class RoomHostingActivity extends AppCompatActivity
 
         switch (view.getId()) {
             case R.id.addroom:
-                Intent intent = new Intent(RoomHostingActivity.this, SetLocationActivity.class);
+                Intent intent = new Intent(RoomHostingActivity.this, GeneralDescriptionActivity.class);
                 intent.putExtra("email", json);
 //                Toast.makeText(RoomHostingActivity.this,"berhasil    :"+json,Toast.LENGTH_LONG).show();
                 startActivity(intent);

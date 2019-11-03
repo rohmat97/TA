@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,29 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.innstant.R;
 import com.example.innstant.data.model.Room;
-
 import java.util.ArrayList;
 
-import butterknife.BindView;
-
-public class adapterListedRoom extends RecyclerView.Adapter<adapterListedRoom.MyViewHolder> {
+public class adapterListedRoom extends RecyclerView.Adapter<adapterListedRoom.MyViewHolder>  {
     Context context;
     ArrayList<Room> Mhost;
     OnItemClickListener listener;
-    @BindView(R.id.GambarHost)
-    ImageView GambarHost;
-    @BindView(R.id.namaKamar)
-    TextView namaKamar;
-    @BindView(R.id.locationRoom)
-    TextView locationRoom;
-    @BindView(R.id.viewRequest)
-    Button viewRequest;
-    @BindView(R.id.typeKamar)
-    TextView typeKamar;
-    @BindView(R.id.rating)
-    TextView rating;
-    @BindView(R.id.price)
-    TextView price;
 
     public interface OnItemClickListener {
         void onItemClick(Room item);
@@ -65,9 +48,18 @@ public class adapterListedRoom extends RecyclerView.Adapter<adapterListedRoom.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+        ImageView gambarHost;
+        TextView namaKamar,status,rating,price,lokasi,typeKamar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            gambarHost = itemView.findViewById(R.id.GambarHost);
+            namaKamar = itemView.findViewById(R.id.namaKamar);
+            status = itemView.findViewById(R.id.statusKamar);
+            rating = itemView.findViewById(R.id.rating);
+            price = itemView.findViewById(R.id.price);
+            lokasi =itemView.findViewById(R.id.locationRoom);
+            typeKamar=itemView.findViewById(R.id.typeKamar);
         }
 
         public void bind(final Room item, final OnItemClickListener listener) {
@@ -76,7 +68,7 @@ public class adapterListedRoom extends RecyclerView.Adapter<adapterListedRoom.My
             //    status.setText(item.get);
             //  rating.setText(item.ge);
             price.setText(item.getPrice());
-            locationRoom.setText(item.getLocation());
+            lokasi.setText(item.getLocation());
             typeKamar.setText(item.getType());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

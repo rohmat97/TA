@@ -31,4 +31,11 @@
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_signup">Sign up</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="tipe">Pilih Tipe</string>
+    <string-array name="room_type">
+        <item>Kost</item>
+        <item>Hotel</item>
+        <item>Villa</item>
+        <item>Rumah</item>
+    </string-array>
 </resources>

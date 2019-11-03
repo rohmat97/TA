@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.innstant.R;
@@ -33,14 +34,18 @@ import com.example.innstant.data.model.Room;
 import com.example.innstant.viewmodel.AddPictureViewModel;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -74,9 +79,9 @@ public class AddPictureActivity extends AppCompatActivity {
     @BindView(R.id.nextsetpricing)
     Button nextsetpricing;
     private AddPictureViewModel mViewModel;
+    Room room = new Room();
 
-
-    ArrayList<String> listImage = new ArrayList<>();
+    ArrayList<String> listImage =new ArrayList<String>() ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +92,10 @@ public class AddPictureActivity extends AppCompatActivity {
         String json = bundle.getString("dataRoom");
         String json1 = bundle.getString("email");
         Gson gson = new Gson();
-        final Room room = gson.fromJson(json, Room.class);
-
+        room = gson.fromJson(json, Room.class);
 
         ButterKnife.bind(this);
         mViewModel = ViewModelProviders.of(AddPictureActivity.this).get(AddPictureViewModel.class);
-
-//
 
         nextsetpricing = (Button) findViewById(R.id.nextsetpricing);
         gambar1 = (ImageView) findViewById(R.id.gambar1);
@@ -191,25 +193,27 @@ public class AddPictureActivity extends AppCompatActivity {
 
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             gambar2.setImageBitmap(bitmap);
+            PostData(gambar2.getDrawable());
         } else if (requestCode == 3) {
 
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             gambar3.setImageBitmap(bitmap);
-
+            PostData(gambar3.getDrawable());
         } else if (requestCode == 4) {
 
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             gambar4.setImageBitmap(bitmap);
-
+            PostData(gambar4.getDrawable());
         } else if (requestCode == 5) {
 
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             gambar5.setImageBitmap(bitmap);
-
+            PostData(gambar5.getDrawable());
         } else if (requestCode == 6) {
 
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             gambar6.setImageBitmap(bitmap);
+            PostData(gambar6.getDrawable());
 
         }
     }
@@ -219,34 +223,26 @@ public class AddPictureActivity extends AppCompatActivity {
             mViewModel.openServerConnection();
             RequestQueue requstQueue = Volley.newRequestQueue(this);
             String url = PreferenceHelper.getBaseUrl() + "/photos/upload_photo";
-//            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-//            OutputStream outStream = null;
-//            File file = new File(extStorageDirectory, "er.PNG");
-//            try {
-//                outStream = new FileOutputStream(file);
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                outStream.flush();
-//                outStream.close();
-//            } catch (Exception e) {
-//
-//            }
-//            String bitmapdata = stream.toString();
-/*            Map<String, Object> params = new HashMap<>();
-            params.put("file", file);
-            params.put("save_directory", "room");
-            JSONObject param = new JSONObject(params);
-            Log.e("", "PostData: " + param);*/
             VolleyMultipartRequest jsonobj = new VolleyMultipartRequest(Request.Method.POST, url,
                     new Response.Listener<NetworkResponse>() {
 
                         @Override
                         public void onResponse(NetworkResponse response) {
-                            Toast.makeText(AddPictureActivity.this, response.toString(), Toast.LENGTH_LONG).show();
-                            Log.d("RESPONBRO", response.toString());
+                            Map<String, String> responseHeaders = response.headers;
+                            try {
+                                JSONObject json = new JSONObject(new String(response.data, HttpHeaderParser.parseCharset(response.headers)));
+                                listImage.add(json.get("fileName").toString());
+                                if(listImage.size()>5){
+                                    room.setPhotos(listImage);
+                                }
+                                Log.d("RESPONBRO", listImage.toString());
+                                Log.d("DATA ROOM", room.toString());
+                                Log.d("SIZE", String.valueOf(listImage.size()));
 
 
+                            } catch (UnsupportedEncodingException | JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
@@ -260,23 +256,11 @@ public class AddPictureActivity extends AppCompatActivity {
                     }
 
             ) {
-            /*    @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Accept", "application/json");
-                    headers.put("Content-Type", "multipart/form-data");
-                    return headers;
-                }*/
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-//                params.put("file", String.valueOf(file));
                 params.put("save_directory", "room");
-             /*   params.put("api_token", "gh659gjhvdyudo973823tt9gvjf7i6ric75r76");
-                params.put("name", mNameInput.getText().toString());
-                params.put("location", mLocationInput.getText().toString());
-                params.put("about", mAvatarInput.getText().toString());
-                params.put("contact", mContactInput.getText().toString());*/
                 return params;
             }
 
@@ -294,50 +278,4 @@ public class AddPictureActivity extends AppCompatActivity {
             requstQueue.add(jsonobj);
         }
     }
-
-//    public void PostData(Bitmap bitmap) {
-//        Log.e("", "PostDataBitmap: "+ bitmap );
-//        mViewModel.openServerConnection();
-//        RequestQueue requstQueue = Volley.newRequestQueue(this);
-//        String url = PreferenceHelper.getBaseUrl() + "/photos/upload_photo";
-//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("file", bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream));
-//        params.put("save_directory", "Room");
-//        JSONObject param = new JSONObject(params);
-//        Log.e("", "PostData: "+ param );
-//        JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url,param,
-//                new Response.Listener<JSONObject>() {
-//
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Toast.makeText(AddPictureActivity.this,response.toString(),Toast.LENGTH_LONG).show();
-//                        Log.d("RESPONBRO",response.toString());
-//
-//
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(AddPictureActivity.this, "gagal  Edit   :" + error.toString(), Toast.LENGTH_LONG).show();
-//                        Log.d("RESPONBRO",error.toString());
-//
-//                    }
-//
-//                }
-//
-//        ) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> headers = new HashMap<>();
-//                headers.put("Accept","application/json");
-//                headers.put("Content-Type","multipart/form-data");
-//                return headers;
-//            }
-//        };
-//        requstQueue.add(jsonobj);
-//    }
-
-
 }

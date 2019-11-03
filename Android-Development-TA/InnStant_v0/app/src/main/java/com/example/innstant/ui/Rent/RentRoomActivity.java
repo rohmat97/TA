@@ -90,7 +90,7 @@ public class RentRoomActivity extends AppCompatActivity
 
 
         GetData(json);
-        rentRoom.setOnClickListener(new View.OnClickListener() {
+        addRent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

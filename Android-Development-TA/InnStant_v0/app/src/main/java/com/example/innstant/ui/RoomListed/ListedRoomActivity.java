@@ -38,8 +38,6 @@ import butterknife.ButterKnife;
 public class ListedRoomActivity extends AppCompatActivity implements adapterListedRoom.OnItemClickListener {
     @BindView(R.id.avaliability)
     Spinner avaliability;
-    @BindView(R.id.listroom)
-    RecyclerView listroom;
     private ListerRoomVewModel mViewModel;
     RecyclerView recyclerView;
     adapterListedRoom adapter;
@@ -53,7 +51,7 @@ public class ListedRoomActivity extends AppCompatActivity implements adapterList
         setContentView(R.layout.activity_listed_room);
 
         list = new ArrayList<>();
-        recyclerView = listroom;
+        recyclerView = findViewById(R.id.listroom);;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);

@@ -1,13 +1,25 @@
 package com.example.innstant.ui.HostRoom;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.innstant.R;
@@ -20,13 +32,29 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GeneralDescriptionActivity extends AppCompatActivity {
-    @BindView(R.id.location)
-    EditText location;
+public class GeneralDescriptionActivity extends AppCompatActivity implements LocationListener {
+    @BindView(R.id.alamat)
+    EditText alamat;
+    @BindView(R.id.rt)
+    EditText rt;
+    @BindView(R.id.rw)
+    EditText rw;
+    @BindView(R.id.provinsi)
+    EditText provinsi;
+    @BindView(R.id.kota)
+    EditText kota;
+    @BindView(R.id.kelurahan)
+    EditText kelurahan;
+    @BindView(R.id.kodepos)
+    EditText kodepos;
+    @BindView(R.id.latitude)
+    EditText latitude;
+    @BindView(R.id.longitude)
+    EditText longitude;
     @BindView(R.id.roomName)
     EditText roomName;
     @BindView(R.id.roomType)
-    EditText roomType;
+    Spinner roomType;
     @BindView(R.id.shower)
     CheckBox shower;
     @BindView(R.id.food)
@@ -44,7 +72,14 @@ public class GeneralDescriptionActivity extends AppCompatActivity {
     @BindView(R.id.Save)
     Button Save;
     private HostViewModel mViewModel;
-
+    protected LocationManager locationManager;
+    protected LocationListener locationListener;
+    protected Context context;
+    TextView txtLat;
+    String lat;
+    String provider;
+    protected String lati, longi;
+    protected boolean gps_enabled, network_enabled;
     String showert;
     String foodt;
     String wifit;
@@ -52,16 +87,20 @@ public class GeneralDescriptionActivity extends AppCompatActivity {
     String parkingt;
     String securityt;
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general_description);
-
         ButterKnife.bind(this);
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            // ask permissions here using below code
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
         mViewModel = ViewModelProviders.of(GeneralDescriptionActivity.this).get(HostViewModel.class);
-
-        Bundle bundle = getIntent().getExtras();
-        String loc = bundle.getString("location");
 ////        Toast.makeText(GeneralDescriptionActivity.this,loc,Toast.LENGTH_LONG).show();
 //        location =(EditText) findViewById(R.id.location);
 //        roomName =(EditText) findViewById(R.id.roomName);
@@ -73,8 +112,9 @@ public class GeneralDescriptionActivity extends AppCompatActivity {
 //        Editext_AcFan=(CheckBox) findViewById(R.id.acorfan);
 //        Editext_parking=(CheckBox) findViewById(R.id.parking);
 //        Editext_security=(CheckBox) findViewById(R.id.security);
-
-        location.setText(loc);
+//retrieve a reference to an instance of TelephonyManager
+        locationManager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
 
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +129,7 @@ public class GeneralDescriptionActivity extends AppCompatActivity {
         mViewModel.openServerConnection();
         Room room = new Room();
         room.setName(roomName.getText().toString());
-        room.setLocation(location.getText().toString());
-        room.setType(roomType.getText().toString());
+        room.setType(String.valueOf(roomType.getSelectedItem()));
         room.setDescription(description.getText().toString());
         ArrayList<String> ameni = new ArrayList<String>();
         if (acorfan.isChecked()) {
@@ -141,43 +180,30 @@ public class GeneralDescriptionActivity extends AppCompatActivity {
         intent.putExtra("dataRoom", paramString);
         intent.putExtra("email", json);
         startActivity(intent);
-//        Toast.makeText(GeneralDescriptionActivity.this,paramString,Toast.LENGTH_LONG).show();
-        /*  try {
-            JSONObject param = new JSONObject(paramString);
-
-            JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.PATCH, url,param,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Toast.makeText(GeneralDescriptionActivity.this,"berhasil",Toast.LENGTH_LONG).show();
-                        }
-
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(GeneralDescriptionActivity.this,"gagal",Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-
-            ){
-                //here I want to post data to sever
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    // Basic Authentication
-                    //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
-
-//                    headers.put("Authorization", "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InJvaG1hdDY2MUBnbWFpbC5jb20iLCJleHAiOjE1NjI2NjM1NjksInJvbGUiOlsiVVNFUiJdfQ.6mGlnlu0lWHuOZLmy_I4IYOD5BJKc-22fbR0sWO-8j_KQ9Jkk4owJZqpP3yPtvBIiRhD_zRYKm-ew3DPqFrK_A");
-                    return headers;
-                }
-            };
-            requstQueue.add(jsonobj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
 
     }
 
+
+    @Override
+    public void onLocationChanged(Location location) {
+//        alamat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
+        latitude.setText(String.valueOf(location.getLatitude()));
+        longitude.setText(String.valueOf(location.getLongitude()));
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Log.d("Latitude", "disable");
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Log.d("Latitude", "enable");
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.d("Latitude", "status");
+    }
 }
+

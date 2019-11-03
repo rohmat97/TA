@@ -19,11 +19,83 @@
             android:orientation="vertical">
             <TextView  android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location"/>
+            android:text="Alamat"/>
             <EditText
-                android:id="@+id/location"
+                android:id="@+id/alamat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView  android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RT"/>
+                <EditText
+                    android:id="@+id/rt"
+                    android:inputType="number"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content" />
+                <TextView  android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RW"/>
+                <EditText
+                    android:id="@+id/rw"
+                    android:inputType="number"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView  android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Provinsi"/>
+            <EditText
+                android:id="@+id/provinsi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView  android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kota/Kabupaten"/>
+            <EditText
+                android:id="@+id/kota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView  android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kelurahan"/>
+            <EditText
+                android:id="@+id/kelurahan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView  android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kode Pos"/>
+            <EditText
+                android:id="@+id/kodepos"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView  android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Latitude"/>
+                <EditText
+                    android:editable="false"
+                    android:id="@+id/latitude"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content" />
+                <TextView  android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Longitude"/>
+                <EditText
+                    android:editable="false"
+                    android:id="@+id/longitude"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
             <TextView  android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Room Name"/>
@@ -34,11 +106,12 @@
             <TextView  android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Room Type"/>
-            <EditText
+            <Spinner
                 android:id="@+id/roomType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:entries="@array/room_type"
+                android:prompt="@string/tipe" />
             <TextView  android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Main Amenities :"/>
