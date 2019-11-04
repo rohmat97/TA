@@ -1,13 +1,16 @@
 package com.example.innstant.ui.Rent;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -42,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ApprovalActivity extends AppCompatActivity {
+
     @BindView(R.id.namaKamar)
     TextView namaKamar;
     @BindView(R.id.pictBooking)
@@ -49,9 +53,9 @@ public class ApprovalActivity extends AppCompatActivity {
     @BindView(R.id.namaUser)
     TextView namaUser;
     @BindView(R.id.Chat)
-    TextView Chat;
-    @BindView(R.id.viewProfile)
-    TextView viewProfile;
+    Button Chat;
+    @BindView(R.id.openLocation)
+    Button openLocation;
     @BindView(R.id.checkin)
     TextView checkin;
     @BindView(R.id.duration)
@@ -100,7 +104,18 @@ public class ApprovalActivity extends AppCompatActivity {
             approved.setText("Back");
             cancelBooking.setBackgroundColor(Color.parseColor("#FF0000"));
             setData(transaksi);
-
+            Chat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chat("123123");
+                }
+            });
+            openLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openLocation("7","100");
+                }
+            });
             approved.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -321,6 +336,28 @@ public class ApprovalActivity extends AppCompatActivity {
             intent.putExtra("email", json);
             startActivity(intent);
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openLocation(String latitude, String longitude) {
+        String uri = "http://maps.google.com/maps?saddr=" + latitude + "," + longitude + "&daddr=" + latitude + "," + longitude;
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        intent.setPackage("com.google.android.apps.maps");
+        startActivity(intent);
+    }
+
+    private void chat(String contact) {
+        contact = "+00 9876543210"; // use country code with your phone number
+        String url = "https://api.whatsapp.com/send?phone=" + contact;
+        try {
+            PackageManager pm = this.getPackageManager();
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        } catch (PackageManager.NameNotFoundException e) {
+            Toast.makeText(ApprovalActivity.this, "Whatsapp app not installed in your phone", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

@@ -25,12 +25,6 @@
         <activity
             android:name=".ui.Auth.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.Dashboard.DashboardMessageActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.Dashboard.DashboardNotificationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.Rent.ApprovalActivity" />
         <activity android:name=".ui.Rent.SelectDateActivity" />
         <activity android:name=".ui.Rent.RoomDetailActivity" />

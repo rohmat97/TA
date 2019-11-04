@@ -23,26 +23,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.innstant.data.PreferenceHelper;
 import com.example.innstant.R;
-import com.example.innstant.data.model.Room;
-import com.example.innstant.data.model.Transaction;
+import com.example.innstant.data.PreferenceHelper;
 import com.example.innstant.data.model.User;
 import com.example.innstant.ui.Auth.LoginActivity;
 import com.example.innstant.ui.Dashboard.ui.NotificationActivity;
-import com.example.innstant.ui.HostRoom.Adapter.AdapterRoomHosting;
-import com.example.innstant.ui.Rent.Adapter.AdapterRoomRent;
 import com.example.innstant.ui.Rent.RentRoomActivity;
 import com.example.innstant.viewmodel.DashboardViewModel;
+import com.example.innstant.viewmodel.LoginViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +47,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    String json;
+    String idUser;
+    ArrayList<User> user = new ArrayList<>();
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.rent)
@@ -62,25 +61,26 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     NavigationView navView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    String json;
-    String idUser ;
-    ArrayList<User> user = new ArrayList<>();
     private DashboardViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         Bundle bundle = getIntent().getExtras();
         json = bundle.getString("email");
-        Toast.makeText(DashboardActivity.this,"SELAMAT DATANG : "+json,Toast.LENGTH_LONG).show();
-        ButterKnife.bind(this);
         mViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+       // Toast.makeText(DashboardActivity.this, "SELAMAT DATANG : " + json, Toast.LENGTH_LONG).show();
+        ButterKnife.bind(this);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
-        navView.setNavigationItemSelectedListener(this);
-        setSupportActionBar(toolbar);
+        navigationView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -114,11 +114,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         if (id == R.id.notify) {
             getDataNotif(json);
         }
-        if (id == R.id.logout) {
-            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -128,7 +123,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.logout) {
+            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -149,10 +147,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @OnClick({R.id.rent, R.id.hosting})
     public void onViewClicked(View view) {
 
-       GetDataUser(json, view);
+        GetDataUser(json, view);
 
     }
-    private void getDataNotif(String email){
+
+    private void getDataNotif(String email) {
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
         String url = PreferenceHelper.getBaseUrl() + "/users";
@@ -163,7 +162,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     @Override
                     public void onResponse(JSONArray response) {
 //                        Toast.makeText(DashboardActivity.this,"berhasil    :"+response,Toast.LENGTH_LONG).show();
-                        Log.d("respon",response.toString());
+                        Log.d("respon", response.toString());
                         JSONObject jsonObject = new JSONObject();
                         for (int i = 0; i < response.length(); i++) {
 
@@ -171,23 +170,22 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                 jsonObject = response.getJSONObject(i);
 
 
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             users = new Gson().fromJson(String.valueOf(jsonObject), User.class);
-                            if(users.getEmail().equals(email)){
+                            if (users.getEmail().equals(email)) {
                                 idUser = users.getUserId();
                                 //                           Toast.makeText(DashboardActivity.this,id + " ------====="+users.getEmail()+users.getUserId()+email,Toast.LENGTH_LONG).show();
-                            }else if (users.getUserId().equals(email)){
-                                idUser =email;
+                            } else if (users.getUserId().equals(email)) {
+                                idUser = email;
                             }
 
                         }
 
 
                         Intent intent = new Intent(DashboardActivity.this, NotificationActivity.class);
-                        intent.putExtra("email",idUser);
+                        intent.putExtra("email", idUser);
                         startActivity(intent);
 
 
@@ -215,6 +213,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         };
         requstQueue.add(jsonobj);
     }
+
     private void GetDataUser(String email, View view) {
         mViewModel.openServerConnection();
         RequestQueue requstQueue = Volley.newRequestQueue(this);
@@ -226,7 +225,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     @Override
                     public void onResponse(JSONArray response) {
 //                        Toast.makeText(DashboardActivity.this,"berhasil    :"+response,Toast.LENGTH_LONG).show();
-                        Log.d("respon",response.toString());
+                        Log.d("respon", response.toString());
                         JSONObject jsonObject = new JSONObject();
                         for (int i = 0; i < response.length(); i++) {
 
@@ -234,16 +233,15 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                 jsonObject = response.getJSONObject(i);
 
 
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             users = new Gson().fromJson(String.valueOf(jsonObject), User.class);
-                            if(users.getEmail().equals(email)){
+                            if (users.getEmail().equals(email)) {
                                 idUser = users.getUserId();
-     //                           Toast.makeText(DashboardActivity.this,id + " ------====="+users.getEmail()+users.getUserId()+email,Toast.LENGTH_LONG).show();
-                            }else if (users.getUserId().equals(email)){
-                                idUser =email;
+                                //                           Toast.makeText(DashboardActivity.this,id + " ------====="+users.getEmail()+users.getUserId()+email,Toast.LENGTH_LONG).show();
+                            } else if (users.getUserId().equals(email)) {
+                                idUser = email;
                             }
 
                             Intent intent;
@@ -251,12 +249,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                 case R.id.rent:
                                     intent = new Intent(DashboardActivity.this, RentRoomActivity.class);
 //                                    Toast.makeText(DashboardActivity.this,id,Toast.LENGTH_LONG).show();
-                                     intent.putExtra("email",idUser);
-                                     startActivity(intent);
+                                    intent.putExtra("email", idUser);
+                                    startActivity(intent);
                                     break;
                                 case R.id.hosting:
                                     intent = new Intent(DashboardActivity.this, RoomHostingActivity.class);
-                                    intent.putExtra("email",idUser);
+                                    intent.putExtra("email", idUser);
 //                                    Toast.makeText(DashboardActivity.this,id,Toast.LENGTH_LONG).show();
                                     startActivity(intent);
                                     break;

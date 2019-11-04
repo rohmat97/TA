@@ -7,29 +7,79 @@
     tools:context=".ui.HostRoom.SetAvaliabilityActivity"
     android:layout_marginRight="20dp"
     android:layout_marginTop="20dp"
-    android:layout_marginLeft="20dp">
+    android:layout_marginLeft="20dp"
+    android:orientation="vertical">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <CalendarView
+    <DatePicker
+        android:id="@+id/datePicker1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></CalendarView>
-    <CheckBox
-        android:id="@+id/allMonth"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Apply to all months"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <Button
-        android:id="@+id/setCalendar"
-        android:text="SET"
-        android:layout_gravity="bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+        <TextView
+            android:layout_margin="25dp"
+            android:text="START DATE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_margin="25dp"
+            android:text="END DATE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_margin="25dp"
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:layout_margin="25dp"
+            android:id="@+id/startDate"
+            android:text="SET START DATE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_margin="25dp"
+            android:id="@+id/endDate"
+            android:text="SET END DATE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <Button
+        android:layout_margin="25dp"
+        android:id="@+id/save"
+        android:text="SAVE ROOM DATA"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
+</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

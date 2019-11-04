@@ -97,7 +97,7 @@ public class SetRoomPricingActivity extends AppCompatActivity {
         try {
             JSONObject param = new JSONObject(paramString);
 
-            JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.PATCH, url, param,
+            JsonObjectRequest jsonobj = new JsonObjectRequest(Request.Method.POST, url, param,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {

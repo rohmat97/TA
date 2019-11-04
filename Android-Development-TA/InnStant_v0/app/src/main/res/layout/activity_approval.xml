@@ -47,23 +47,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <TextView
+                    <Button
                         android:background="#CFCFCF"
                         android:id="@+id/Chat"
-                        android:layout_width="48dp"
-                        android:layout_height="20dp"
+                        android:layout_width="75dp"
+                        android:layout_height="25dp"
                         android:text="Chat"
                         android:textSize="8dp"
                         />
                     <Space
                         android:layout_width="10dp"
                         android:layout_height="wrap_content" />
-                    <TextView
-                        android:text="View Profile >"
+                    <Button
+                        android:text="Open Location"
                         android:background="#CFCFCF"
-                        android:id="@+id/viewProfile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:id="@+id/openLocation"
+                        android:layout_width="75dp"
+                        android:layout_height="25dp"
                         android:textSize="8dp"/>
                 </LinearLayout>
             </LinearLayout>
