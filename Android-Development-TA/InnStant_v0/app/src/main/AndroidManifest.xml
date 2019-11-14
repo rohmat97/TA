@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.innstant">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +13,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.Dashboard.ui.NotificationActivity"></activity>
+        <activity
+            android:name=".ui.Admin.validasiKamar.ValidasiKamarActivity"
+            android:label="@string/title_activity_validasi_kamar"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.Admin.validasiAccount.ValidasiAccountActivity"
+            android:label="@string/title_activity_validasi_account"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.Admin.listKamar.ListKamarActivity"
+            android:label="@string/title_activity_list_kamar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.Admin.listAccount.ListActivity"
+            android:label="@string/title_activity_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.Admin.AdminActivity"
+            android:label="@string/title_activity_admin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.Dashboard.ui.NotificationActivity" />
         <activity android:name=".ui.RoomListed.EditRoomActivity" />
         <activity
             android:name=".ui.Auth.LoginActivity"
@@ -42,8 +64,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".ui.Rent.FindingNearbyRoomsActivity" />
+        <activity android:name=".ui.Rent.FindingNearbyRoomsActivity" />
         <activity
             android:name=".ui.Rent.RentRoomActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -56,22 +77,7 @@
         <activity android:name=".ui.RoomListed.ListedRoomActivity" />
         <activity android:name=".ui.HostRoom.SetAvaliabilityActivity" />
         <activity android:name=".ui.HostRoom.GeneralDescriptionActivity" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <!-- <meta-data -->
-        <!-- android:name="OnlineMaps.Key" -->
-        <!-- android:value="@string/online_maps_key" /> -->
-        <!-- <meta-data -->
-        <!-- android:name="OnlineSearch.Key" -->
-        <!-- android:value="@string/online_search_key" /> -->
-        <activity
-            android:name=".ui.SetLocationActivity"/>
+        <activity android:name=".ui.SetLocationActivity" />
         <activity
             android:name=".ui.RoomHostingActivity"
             android:theme="@style/AppTheme.NoActionBar" />

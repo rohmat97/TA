@@ -1,5 +1,7 @@
 package com.example.innstant.data.model;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -41,6 +43,9 @@ public class User {
 
     @SerializedName("profilePhoto")
     private String profilePhoto;
+//
+//    @SerializedName("profilePhoto")
+//    private Bitmap profilePhotoBitmap;
 
     @SerializedName("idCardPhoto")
     private String idCardPhoto;

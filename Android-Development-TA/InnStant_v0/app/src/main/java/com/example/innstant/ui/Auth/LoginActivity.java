@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.innstant.R;
 import com.example.innstant.data.PreferenceHelper;
+import com.example.innstant.ui.Admin.AdminActivity;
 import com.example.innstant.ui.DashboardActivity;
 import com.example.innstant.viewmodel.LoginViewModel;
 
@@ -45,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     Button login;
     @BindView(R.id.signup)
     Button signup;
+    @BindView(R.id.admin)
+    Button admin;
     private LoginViewModel mViewModel;
     private String baseUrl;
 
@@ -71,6 +74,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Login();
+            }
+        });
+
+        admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -55,7 +55,7 @@ public class adapterListedRoom extends RecyclerView.Adapter<adapterListedRoom.My
             super(itemView);
             gambarHost = itemView.findViewById(R.id.GambarHost);
             namaKamar = itemView.findViewById(R.id.namaKamar);
-            status = itemView.findViewById(R.id.statusKamar);
+            status = itemView.findViewById(R.id.status);
             rating = itemView.findViewById(R.id.rating);
             price = itemView.findViewById(R.id.price);
             lokasi =itemView.findViewById(R.id.locationRoom);

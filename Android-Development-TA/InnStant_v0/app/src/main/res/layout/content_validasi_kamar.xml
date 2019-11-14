@@ -5,12 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.Dashboard.DashboardMessageActivity"
-    tools:showIn="@layout/activity_dashboard_message">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/messageDashboard"
+    tools:context=".ui.Admin.validasiKamar.ValidasiKamarActivity"
+    tools:showIn="@layout/activity_validasi_kamar">
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"></androidx.recyclerview.widget.RecyclerView>
+        tools:ignore="MissingConstraints">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/validasiKamar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
