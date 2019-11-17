@@ -50,6 +50,7 @@ public class TransactionServiceImplementation implements TransactionService {
             findTransaction.setBookEndDate(transaction.getBookEndDate());
             findTransaction.setPaymentStatus(transaction.getPaymentStatus());
             findTransaction.setIsBookingCanceled(transaction.getIsBookingCanceled());
+            findTransaction.setStatus(transaction.getStatus());
             transactionRepository.save(findTransaction).subscribe();
         });
     }

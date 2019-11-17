@@ -61,10 +61,10 @@ public class Room {
     @Field("photos")
     private List<String> photos;
 
+    @Field("status")
+    private Boolean status;
+
     public Room(ObjectId id) {
         this._id = id;
     }
-
-    @Field("status")
-    private Boolean status;
 }

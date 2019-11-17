@@ -49,6 +49,7 @@ public class RoomServiceImplementation implements RoomService {
             findRoom.setRating(room.getRating());
             findRoom.setTotalReview(room.getTotalReview());
             findRoom.setPhotos(room.getPhotos());
+            findRoom.setStatus(room.getStatus());
             roomRepository.save(findRoom).subscribe();
         });
     }
